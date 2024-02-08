@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 public class AtomicIntegerService {
 
     private final List<AtomicInteger> atomicIntegers;
-    private int baseValue = 0; // Adjusted to manage the initial increment
+    private int baseValue = 0; 
 
     public AtomicIntegerService() {
         atomicIntegers = IntStream.range(0, 5)
@@ -20,13 +20,11 @@ public class AtomicIntegerService {
     }
 
     public synchronized List<Integer> incrementAll() {
-        // Increment each AtomicInteger and collect their new values
         List<Integer> newValues = atomicIntegers.stream()
                 .map(ai -> ai.incrementAndGet())
                 .collect(Collectors.toList());
 
         // Update the baseValue for the next cycle based on the last incremented value
-        // This adjustment now happens after the incrementation to correct the initial state
         if (!newValues.isEmpty()) {
             baseValue = newValues.get(newValues.size() - 1);
         }
@@ -43,7 +41,6 @@ public class AtomicIntegerService {
                 .forEach(i -> atomicIntegers.get(i).set(i));
         baseValue = 4; // Reset the base value as before
 
-        // Return the new state of atomic integers after reset
         return atomicIntegers.stream()
                 .map(AtomicInteger::get)
                 .collect(Collectors.toList());
